@@ -21,7 +21,7 @@ public class Denis : IEntity
  public DateTime StartDate { get; set; }
  
  [Required]
- public int EnisID { get; set; }
- public virtual Enis enis { get; set; }
+ public int UserID { get; set; }
+ public virtual User user { get; set; }
  
 }
