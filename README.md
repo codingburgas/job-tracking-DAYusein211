@@ -1,145 +1,261 @@
-# 🔍 Look – Job Application Tracking System
+# 🚀 Look
 
-> 🎓 Internship Project 2024/2025  
-> 👨‍🎓 Class: 11V  
-> 🧑‍💻 Developer: Denis Yusein
+A modern, full-stack web application that streamlines the job searching and application process. Built with cutting-edge technologies to provide an exceptional user experience for both job seekers and administrators.
 
----
+![LOOK Banner](https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1200&h=400&fit=crop)
 
-## 🎯 Project Overview
+## ✨ Features
 
-**Look** is a modern web-based system developed to streamline the process of job searching and application tracking. It is designed for two main types of users:
+### 👤 For Job Seekers
+- **Seamless Registration & Login** - Create your account and access personalized dashboard
+- **Browse Active Jobs** - Discover opportunities with detailed job descriptions
+- **One-Click Applications** - Apply to jobs instantly with application tracking
+- **Application Management** - Track status updates (Submitted, Interview, Rejected)
+- **Responsive Design** - Perfect experience across all devices
 
-- **Regular users**, who are searching for job opportunities and want to track the status of their applications.
-- **Administrators (HR professionals)**, who manage job postings and review candidate applications.
+### 👨‍💼 For Administrators
+- **Comprehensive Admin Dashboard** - Manage all aspects of job postings
+- **Job Posting Management** - Create, edit, activate/deactivate, and delete listings
+- **Application Review System** - View and update application statuses
+- **Real-time Analytics** - Track job posting performance and application metrics
+- **Bulk Operations** - Efficiently manage multiple listings and applications
 
-The platform ensures a simple and effective interface for applying to jobs, managing postings, and processing candidate statuses.
+## 🛠️ Tech Stack
 
----
+### Frontend
+- **Angular 20** - Modern TypeScript framework
+- **Tailwind CSS** - Utility-first CSS framework
+- **RxJS** - Reactive programming for Angular
+- **Angular Router** - Client-side routing
+- **HTTP Interceptors** - JWT token management
 
-## 🛠️ Technologies Used
+### Backend
+- **ASP.NET Core 9** - High-performance web API
+- **Entity Framework Core** - Object-relational mapping
+- **SQL** - Lightweight database
+- **JWT Authentication** - Secure token-based auth
+- **BCrypt** - Password hashing
 
-| Layer        | Technology              |
-|--------------|--------------------------|
-| 🎨 Design     | [Figma](https://figma.com) |
-| 💻 Frontend   | [Angular](https://angular.io/) |
-| 🔧 Backend    | [C# (.NET Core)](https://dotnet.microsoft.com/en-us/) |
-| 🗄️ Database   | [SQL Server](https://www.microsoft.com/en-us/sql-server/) |
+### Design & Development
+- **Figma** - UI/UX design and prototyping
+- **RESTful API** - Clean API architecture
+- **CORS** - Cross-origin resource sharing
+- **Swagger/OpenAPI** - API documentation
 
----
+## 🏗️ Architecture
 
-## 🌐 Key Features
+```
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Angular SPA   │    │  ASP.NET Core   │    │   SQLite DB     │
+│                 │    │      API        │    │                 │
+│  • Components   │◄──►│  • Controllers  │◄──►│  • Users        │
+│  • Services     │    │  • Services     │    │  • JobPostings  │
+│  • Guards       │    │  • Models       │    │  • Applications │
+│  • Interceptors │    │  • JWT Auth     │    │                 │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+```
 
-### 👤 User Role (USER)
+## 🚀 Quick Start
 
-- 🔐 Register and log in
-- 🔎 Browse active job listings
-- 📩 Apply for a job (only once per position)
-- 📊 View and track your submitted applications and statuses
+### Prerequisites
+- [.NET 9 SDK](https://dotnet.microsoft.com/download)
+- [Node.js 18+](https://nodejs.org/)
+- [Angular CLI](https://angular.io/cli)
 
-### 🛠️ Admin Role (ADMIN)
+### Backend Setup
 
-- 🔐 Log in with a pre-created admin account
-- 📝 Create, edit, and delete job postings
-- 👀 View and manage all user applications
-- 🛠️ Update application statuses (e.g., Submitted → Interview → Rejected)
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd jobsearch-pro
+   ```
 
-### 📄 Job Posting Details
+2. **Navigate to API directory**
+   ```bash
+   cd API
+   ```
 
-Each job posting contains:
+3. **Restore dependencies**
+   ```bash
+   dotnet restore
+   ```
 
-- Position title (e.g., "Programmer", "Office Assistant")
-- Company name
-- Short description (responsibilities, requirements, work conditions)
-- Date posted
-- Status: **Active** (open) / **Inactive** (closed)
+4. **Run the API**
+   ```bash
+   dotnet run
+   ```
+   
+   The API will be available at `http://localhost:5000`
 
-### ✅ Application Status
+### Frontend Setup
 
-Each application includes:
+1. **Navigate to WEB directory**
+   ```bash
+   cd WEB
+   ```
 
-- Linked job and user
-- Initial status: **Submitted**
-- Updated by admin to: **Interview** or **Rejected**
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
----
+3. **Start the development server**
+   ```bash
+   npm start
+   ```
+   
+   The application will be available at `http://localhost:4200`
 
-## 🔐 Roles & Permissions
+## 📊 Database Schema
 
-| Role    | Access Level                            | Restrictions                        |
-|---------|------------------------------------------|-------------------------------------|
-| `USER`  | View jobs, apply, track own applications | Cannot manage job postings          |
-| `ADMIN` | Full access to all jobs and applications | Cannot apply to jobs                |
+### Users Table
+| Field | Type | Description |
+|-------|------|-------------|
+| Id | int | Primary key |
+| FirstName | string | User's first name |
+| MiddleName | string | User's middle name (optional) |
+| LastName | string | User's last name |
+| Username | string | Unique username |
+| PasswordHash | string | Hashed password |
+| Role | enum | USER or ADMIN |
+| CreatedAt | datetime | Account creation date |
 
-🛑 Unauthorized actions trigger an error message and block access.  
-✔️ All user inputs are validated (required fields, text length, etc.).
+### JobPostings Table
+| Field | Type | Description |
+|-------|------|-------------|
+| Id | int | Primary key |
+| Title | string | Job title |
+| CompanyName | string | Company name |
+| Description | string | Job description |
+| PostedDate | datetime | Date posted |
+| Status | enum | Active or Inactive |
 
----
+### Applications Table
+| Field | Type | Description |
+|-------|------|-------------|
+| Id | int | Primary key |
+| UserId | int | Foreign key to Users |
+| JobPostingId | int | Foreign key to JobPostings |
+| Status | enum | Submitted, SelectedForInterview, Rejected |
+| SubmittedDate | datetime | Application submission date |
 
-## 📋 Business Rules
+## 🔐 Authentication & Authorization
 
-- A user can apply to **multiple jobs**.
-- A user can apply to the **same job only once**.
-- A job can have **unlimited applications** from different users.
-- Users **can only view** their own applications.
-- Admins **can view all** jobs and applications.
-- Admins **cannot apply** for jobs.
-- Admin accounts are **pre-created manually** by system staff or teachers.
+- **JWT Token-based Authentication** - Secure stateless authentication
+- **Role-based Access Control** - Separate permissions for users and admins
+- **Password Hashing** - BCrypt for secure password storage
+- **Route Guards** - Frontend protection for authenticated routes
 
----
+### Default Admin Account
+```
+Username: admin
+Password: admin123
+```
 
-## 🧪 Example Workflow
+## 🎨 Design System
 
-1. **Admin** logs in and creates a job post (e.g., "Frontend Developer").
-2. **User** registers and logs in.
-3. The user browses job listings and applies to one.
-4. The system records an application with status `Submitted`.
-5. The **admin** later reviews applications and updates the status.
-6. The **user** logs back in and sees the updated status of their application.
+The application features a modern, glassmorphism-inspired design with:
 
----
+- **Color Palette**: Blue gradients with purple accents
+- **Typography**: Inter font family for optimal readability
+- **Components**: Reusable UI components with consistent styling
+- **Responsive**: Mobile-first design approach
+- **Animations**: Smooth transitions and micro-interactions
 
-## 🎨 UI Color Palette
+## 📱 Screenshots
 
-| Purpose       | Color Name | Hex Code  |
-|---------------|------------|-----------|
-| Primary       | Dark Blue  | `#0A2342` |
-| Accent        | Blue       | `#1779FF` |
+### User Dashboard
+![User Dashboard](https://images.pexels.com/photos/3184360/pexels-photo-3184360.jpeg?auto=compress&cs=tinysrgb&w=800&h=400&fit=crop)
 
-Used consistently across UI for a modern and professional look.
+### Admin Panel
+![Admin Panel](https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=800&h=400&fit=crop)
 
----
+## 🔧 API Endpoints
 
-## 📁 Project Structure (Simplified)
+### Authentication
+- `POST /api/auth/login` - User login
+- `POST /api/auth/register` - User registration
 
-Look/
-├── backend/ # ASP.NET Core API
-│ ├── Controllers/
-│ ├── Models/
-│ ├── Services/
-│ └── Program.cs
-├── frontend/ # Angular app
-│ ├── src/
-│ │ ├── app/
-│ │ │ ├── components/
-│ │ │ ├── pages/
-│ │ │ └── services/
-│ └── angular.json
-├── database/ # SQL scripts for schema and seed data
-├── designs/ # Figma design files
-└── README.md
+### Job Postings
+- `GET /api/jobpostings` - Get all job postings
+- `GET /api/jobpostings/{id}` - Get specific job posting
+- `POST /api/jobpostings` - Create job posting (Admin only)
+- `PUT /api/jobpostings/{id}` - Update job posting (Admin only)
+- `DELETE /api/jobpostings/{id}` - Delete job posting (Admin only)
 
+### Applications
+- `GET /api/applications` - Get user applications
+- `POST /api/applications/apply/{jobId}` - Apply for job
+- `PUT /api/applications/{id}/status` - Update application status (Admin only)
+- `GET /api/applications/check/{jobId}` - Check if user applied
 
----
+## 🧪 Testing
 
-## 🚀 Getting Started
-
-### 🔧 Backend (C# .NET Core)
-
+### Backend Testing
 ```bash
-cd backend
-dotnet restore
-dotnet run
-cd frontend
-npm install
-ng serve
+cd API
+dotnet test
+```
+
+### Frontend Testing
+```bash
+cd WEB
+npm test
+```
+
+## 📦 Deployment
+
+### Backend Deployment
+1. Publish the application:
+   ```bash
+   dotnet publish -c Release
+   ```
+
+2. Deploy to your preferred hosting service (Azure, AWS, etc.)
+
+### Frontend Deployment
+1. Build for production:
+   ```bash
+   ng build --prod
+   ```
+
+2. Deploy the `dist/` folder to your web server
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 👥 Team
+
+- **Frontend Development** - Angular & Tailwind CSS
+- **Backend Development** - ASP.NET Core & Entity Framework
+- **UI/UX Design** - Figma prototyping and design system
+- **Database Design** - SQLite with Entity Framework migrations
+
+## 🆘 Support
+
+If you encounter any issues or have questions:
+
+1. Check the [Issues](../../issues) page
+2. Create a new issue with detailed description
+3. Contact the development team
+
+---
+
+<div align="center">
+  <p>Built with ❤️ using modern web technologies</p>
+  <p>
+    <a href="#-features">Features</a> •
+    <a href="#-tech-stack">Tech Stack</a> •
+    <a href="#-quick-start">Quick Start</a> •
+    <a href="#-api-endpoints">API</a>
+  </p>
+</div>
