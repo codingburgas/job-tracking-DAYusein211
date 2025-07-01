@@ -26,7 +26,7 @@ public class ApplicationsController : ControllerBase
         var application = await _applicationService.SubmitApplicationAsync(userId, jobId);
         
         if (application == null)
-            return BadRequest(new { message = "Unable to submit application. You may have already applied or the job is inactive." });
+            return BadRequest(new { message = "Unable to submit application." });
 
         return CreatedAtAction(nameof(GetUserApplications), application);
     }
