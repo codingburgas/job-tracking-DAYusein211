@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { JobService } from '../../services/job.service';
 import { ApplicationService } from '../../services/application.service';
 import { AuthService } from '../../services/auth.service';
@@ -9,171 +10,114 @@ import { JobPosting } from '../../models/job.model';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   template: `
-    <div class="min-h-screen bg-gray-50">
-      <!-- Hero Section -->
-      <div class="hero-pattern">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-          <div class="text-center text-white">
-            <h1 class="text-4xl md:text-5xl font-bold mb-4">
-              Where Talent Meets Opportunity
-            </h1>
-            <p class="text-xl mb-8 max-w-2xl mx-auto">
-              Thousands of Jobs Await — Take Your Next Career Step Now!
-            </p>
-
-            <!-- Search Bar -->
-            <div class="max-w-2xl mx-auto">
-              <form [formGroup]="searchForm" (ngSubmit)="onSearch()" class="flex rounded-full overflow-hidden shadow-lg">
-                <input
-                    formControlName="search"
-                    type="text"
-                    placeholder="Search here..."
-                    class="flex-1 px-6 py-4 text-gray-800 focus:outline-none rounded-l-full"
-                />
-                <button
-                    type="submit"
-                    class="bg-gray-900 hover:bg-purple-900 text-white px-8 py-4 font-medium rounded-r-full transition-colors"
-                >
-                  Search Job
-                </button>
-              </form>
-            </div>
-          </div>
+    <main class="flex flex-col min-h-screen bg-gray-100">
+      <!-- Hero + Search -->
+      <section class=" text-white py-5">
+        <div class="max-w-6xl text-left space-y-6 px-6"> 
+          <form [formGroup]="searchForm" (ngSubmit)="onSearch()"
+                class="flex max-w-4xl  rounded-full bg-white overflow-hidden shadow-lg">
+            <input formControlName="search"
+                   type="text"
+                   placeholder="Job title or keyword..."
+                   class="flex-1 px-6 py-4 text-gray-800  border-none focus:outline-none" />
+            <button type="submit"
+                    class="bg-blue-600 hover:bg-blue-500 text-white px-12 font-semibold transition">
+              search
+            </button>
+          </form>
         </div>
-      </div>
+      </section>
 
       <!-- Main Content -->
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="flex gap-8">
-          <!-- Sidebar -->
-          <aside class="w-72 bg-white rounded-xl shadow-md p-6 sticky top-20 self-start">
-            <!-- Filter Section -->
-            <h3 class="text-lg font-semibold text-gray-900 mb-6">Filter</h3>
-
-            <!-- Job Type Filter -->
+      <div class="max-w-7xl  py-10">
+        <div class="flex gap-8 px-6 ">
+          <!-- Sidebar Filters -->
+          <aside class="w-72 flex-shrink-0 bg-[#0F172A] rounded-2xl shadow p-6 sticky top-20 self-start">
+            <h3 class="text-lg font-semibold text-white mb-4">Filter</h3>
             <fieldset>
-              <legend class="text-gray-700 font-medium mb-3">Job Type</legend>
+              <legend class="text-white font-medium mb-2">Job Type</legend>
               <div class="flex flex-col space-y-3">
-                <label class="inline-flex items-center space-x-2 cursor-pointer">
-                  <input type="radio" name="jobType" value="" (change)="onJobTypeChange('')" [checked]="selectedJobType === ''" />
-                  <span>All Types</span>
-                </label>
-                <label class="inline-flex items-center space-x-2 cursor-pointer">
-                  <input type="radio" name="jobType" value="Full-time" (change)="onJobTypeChange('Full-time')" [checked]="selectedJobType === 'Full-time'" />
-                  <span>Full-time</span>
-                </label>
-                <label class="inline-flex items-center space-x-2 cursor-pointer">
-                  <input type="radio" name="jobType" value="Part-time" (change)="onJobTypeChange('Part-time')" [checked]="selectedJobType === 'Part-time'" />
-                  <span>Part-time</span>
-                </label>
-                <label class="inline-flex items-center space-x-2 cursor-pointer">
-                  <input type="radio" name="jobType" value="Contract" (change)="onJobTypeChange('Contract')" [checked]="selectedJobType === 'Contract'" />
-                  <span>Contract</span>
-                </label>
-                <label class="inline-flex items-center space-x-2 cursor-pointer">
-                  <input type="radio" name="jobType" value="Internship" (change)="onJobTypeChange('Internship')" [checked]="selectedJobType === 'Internship'" />
-                  <span>Internship</span>
+                <label *ngFor="let type of ['','Full-time','Part-time','Internship','Contract']"
+                       class="flex items-center space-x-2 w-full">
+                  <input type="radio"
+                         name="jobType"
+                         [value]="type"
+                         (change)="onJobTypeChange(type)"
+                         [checked]="selectedJobType === type"
+                         class="form-radio text-blue-600" />
+                  <span class="text-white  text-opacity-70">{{ type || 'All Types' }}</span>
                 </label>
               </div>
             </fieldset>
           </aside>
 
           <!-- Job Listings -->
-          <main class="flex-1">
+          <section class="flex-1">
             <div class="flex justify-between items-center mb-6">
               <h2 class="text-3xl font-bold text-gray-900">
-                Explore All Jobs <span class="text-purple-600">({{ jobs.length }})</span>
+                Browse All <span class="text-blue-600">({{ jobs.length }})</span>
               </h2>
-             
             </div>
 
             <!-- Job Cards -->
-            <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <article
-                  *ngFor="let job of jobs"
-                  class="card flex flex-col hover:shadow-lg transition-shadow cursor-pointer p-6"
-              >
-                <div class="flex items-center space-x-4 mb-4">
-                  <div
-                      class="w-14 h-14 rounded-lg flex items-center justify-center bg-purple-400 text-white font-bold text-xl"
-                  >
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <article *ngFor="let job of jobs"
+                       class="bg-white rounded-2xl shadow p-6 flex flex-col hover:shadow-lg transition">
+                <div class="flex items-center mb-4">
+                  <div class="w-14 h-14 rounded-lg bg-blue-600 text-white flex items-center justify-center text-xl font-bold">
                     {{ job.companyName.charAt(0) }}
                   </div>
-
-                  <div class="flex-1">
+                  <div class="ml-4 flex-1">
                     <h3 class="text-lg font-semibold text-gray-900">{{ job.title }}</h3>
-                    <p class="text-sm text-gray-500">
-                      {{ job.companyName }} • {{ job.location }}
-                    </p>
+                    <p class="text-sm text-gray-500">{{ job.companyName }} • {{ job.location }}</p>
                   </div>
-
-                  <span class="text-xs text-gray-400">
-                    {{ getTimeAgo(job.datePosted) }}
-                  </span>
+                  <span class="text-xs text-gray-400">{{ getTimeAgo(job.datePosted) }}</span>
                 </div>
 
-                <p class="text-gray-700 flex-grow line-clamp-3 mb-4">
-                  {{ job.description }}
-                </p>
+                <p class="text-gray-700 flex-grow mb-4 line-clamp-3">{{ job.description }}</p>
 
-                <div class="flex flex-wrap gap-3 text-sm text-gray-700">
-                  <span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full font-semibold">{{ job.jobType }}</span>
-                  <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full font-semibold">{{ job.experienceLevel }}</span>
-                  <span class="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full font-semibold">{{ job.salaryRange }}</span>
+                <div class="flex flex-wrap gap-2 mb-6 text-sm">
+                  <span class="px-3 py-1 bg-blue-50 text-blue-600 rounded-full">{{ job.jobType }}</span>
+                  <span class="px-3 py-1 bg-green-50 text-green-600 rounded-full">{{ job.experienceLevel }}</span>
+                  <span class="px-3 py-1 bg-yellow-50 text-yellow-600 rounded-full">{{ job.salaryRange }}</span>
                 </div>
 
-                <button
-                    *ngIf="!authService.isAdmin"
-                    (click)="applyToJob(job.id)"
-                    [disabled]="applyingToJob === job.id"
-                    class="mt-6 bg-purple-600 hover:bg-purple-700 text-white rounded-full py-2 font-semibold transition"
-                >
-                  <span *ngIf="applyingToJob === job.id">Applying...</span>
-                  <span *ngIf="applyingToJob !== job.id">Apply</span>
+                <button *ngIf="!authService.isAdmin"
+                        (click)="applyToJob(job.id)"
+                        [disabled]="applyingToJob === job.id"
+                        class="mt-auto bg-blue-600 hover:bg-blue-500 text-white rounded-full py-2 font-semibold transition">
+                  {{ applyingToJob === job.id ? 'Applying…' : 'Apply' }}
                 </button>
               </article>
-            </section>
-
-            <!-- Loading State -->
-            <div *ngIf="loading" class="flex justify-center py-10">
-              <div class="animate-spin rounded-full h-10 w-10 border-b-4 border-purple-600"></div>
             </div>
 
-            <!-- Empty State -->
+            <!-- Loading & Empty States -->
+            <div *ngIf="loading" class="flex justify-center py-10">
+              <div class="animate-spin rounded-full h-10 w-10 border-b-4 border-blue-600"></div>
+            </div>
             <div *ngIf="!loading && jobs.length === 0" class="text-center py-16 text-gray-500">
               No jobs found.
             </div>
-          </main>
+          </section>
         </div>
       </div>
-    </div>
-  `,
-  styles: [`
-    .hero-pattern {
-      background: linear-gradient(135deg, #7e5bef 0%, #ac42ff 100%);
-    }
-    .card {
-      background: white;
-      padding: 1.5rem;
-      border-radius: 0.5rem;
-      box-shadow: 0 1px 4px rgb(0 0 0 / 0.05);
-    }
-  `]
+    </main>
+  `
 })
 export class DashboardComponent implements OnInit {
+  searchForm: FormGroup;
   jobs: JobPosting[] = [];
   loading = false;
   applyingToJob: number | null = null;
   selectedJobType = '';
-  searchForm: FormGroup;
 
   constructor(
+      private fb: FormBuilder,
       private jobService: JobService,
       private applicationService: ApplicationService,
-      public authService: AuthService,
-      private fb: FormBuilder
+      public authService: AuthService
   ) {
     this.searchForm = this.fb.group({ search: [''] });
   }
@@ -189,9 +133,7 @@ export class DashboardComponent implements OnInit {
         this.jobs = jobs;
         this.loading = false;
       },
-      error: () => {
-        this.loading = false;
-      }
+      error: () => (this.loading = false)
     });
   }
 
@@ -204,38 +146,25 @@ export class DashboardComponent implements OnInit {
     this.loadJobs();
   }
 
-  applyToJob(jobId: number) {
-    this.applyingToJob = jobId;
-    this.applicationService.submitApplication(jobId).subscribe({
-      next: () => {
-        this.applyingToJob = null;
-        alert('Application submitted successfully!');
-      },
-      error: () => {
-        this.applyingToJob = null;
-        alert('Failed to submit application.');
-      }
-    });
+  applyToJob(id: number) {
+    this.applyingToJob = id;
+    this.applicationService.submitApplication(id).subscribe({ next: () => (this.applyingToJob = null), error: () => (this.applyingToJob = null) });
   }
 
   getTimeAgo(dateInput: string | Date): string {
     const date = typeof dateInput === 'string' ? new Date(dateInput) : dateInput;
-    const now = new Date();
-    const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
-
-    if (seconds < 60) return `${seconds} seconds ago`;
-    const minutes = Math.floor(seconds / 60);
-    if (minutes < 60) return `${minutes} minutes ago`;
-    const hours = Math.floor(minutes / 60);
-    if (hours < 24) return `${hours} hours ago`;
-    const days = Math.floor(hours / 24);
-    if (days < 7) return `${days} days ago`;
-    const weeks = Math.floor(days / 7);
-    if (weeks < 4) return `${weeks} weeks ago`;
-    const months = Math.floor(days / 30);
-    if (months < 12) return `${months} months ago`;
-    const years = Math.floor(days / 365);
-    return `${years} years ago`;
+    const diff = Math.floor((Date.now() - date.getTime()) / 1000);
+    if (diff < 60) return `${diff}s ago`;
+    const m = Math.floor(diff / 60);
+    if (m < 60) return `${m}m ago`;
+    const h = Math.floor(m / 60);
+    if (h < 24) return `${h}h ago`;
+    const d = Math.floor(h / 24);
+    if (d < 7) return `${d}d ago`;
+    const w = Math.floor(d / 7);
+    if (w < 4) return `${w}w ago`;
+    const mo = Math.floor(d / 30);
+    if (mo < 12) return `${mo}mo ago`;
+    return `${Math.floor(d / 365)}y ago`;
   }
-
 }

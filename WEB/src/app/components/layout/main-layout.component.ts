@@ -1,92 +1,71 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet, Router } from '@angular/router';
+import { RouterOutlet, RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-main-layout',
   standalone: true,
-  imports: [CommonModule, RouterOutlet],
+  imports: [CommonModule, RouterOutlet, RouterModule],
   template: `
-    <div class="flex h-screen bg-gray-50">
-      <!-- Sidebar -->
-      <aside class="w-64 bg-white border-r border-gray-200 flex flex-col">
-        <div class="flex items-center h-16 px-6 border-b border-gray-200">
-          <div class="w-8 h-8 bg-purple-500 rounded-lg flex items-center justify-center">
-            <span class="text-white font-bold text-sm">L</span>
+    <div class="flex flex-col min-h-screen bg-gray-100">
+      <!-- Top Nav -->
+      <header class="bg-[#0F172A] text-white py-4 px-6 flex items-center justify-between shadow-md">
+        <div class="flex items-center space-x-3">
+          <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+            <span class="text-white font-bold text-lg">L</span>
           </div>
-          <span class="ml-3 text-xl font-semibold text-gray-900">Look</span>
+          <span class="text-2xl font-extrabold tracking-wider">LOOK</span>
         </div>
-
-        <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
-          <a
-              (click)="navigateToRoute('/')"
-              class="block px-4 py-2 rounded-md text-sm font-medium cursor-pointer"
-              [class]="
-              isActiveRoute('/') ? 'bg-purple-100 text-purple-700' : 'text-gray-600 hover:text-gray-900'
-            "
-          >
+        <nav class="space-x-6 font-medium">
+          <a routerLink="/" [class]="isActiveRoute('/') ? 'text-blue-400' : 'text-gray-300 hover:text-white'">
             Browse Jobs
           </a>
           <a
               *ngIf="!authService.isAdmin"
-              (click)="navigateToRoute('/applications')"
-              class="block px-4 py-2 rounded-md text-sm font-medium cursor-pointer"
-              [class]="
-              isActiveRoute('/applications') ? 'bg-purple-100 text-purple-700' : 'text-gray-600 hover:text-gray-900'
-            "
+              routerLink="/applications"
+              [class]="isActiveRoute('/applications') ? 'text-blue-400' : 'text-gray-300 hover:text-white'"
           >
             My Applications
           </a>
           <a
               *ngIf="authService.isAdmin"
-              (click)="navigateToRoute('/admin')"
-              class="block px-4 py-2 rounded-md text-sm font-medium cursor-pointer"
-              [class]="
-              isActiveRoute('/admin') ? 'bg-purple-100 text-purple-700' : 'text-gray-600 hover:text-gray-900'
-            "
+              routerLink="/admin"
+              [class]="isActiveRoute('/admin') ? 'text-blue-400' : 'text-gray-300 hover:text-white'"
           >
             Owner
           </a>
         </nav>
-      </aside>
-
-      <!-- Main content area -->
-      <div class="flex flex-col flex-1">
-        <!-- Top bar -->
-        <header class="flex items-center justify-end h-16 px-6 bg-white border-b border-gray-200">
-          <div class="flex items-center space-x-4">
-            <div class="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center">
-              <span class="text-white text-sm font-medium">
-                {{
-                  (authService.currentUser$ | async)?.firstName?.charAt(0)
-                }}
-              </span>
+        <div class="flex items-center space-x-4">
+         
+          <div class="hidden sm:flex flex-col text-right">
+            <div class="text-sm font-medium text-gray-200">
+              {{ (authService.currentUser$ | async)?.firstName }}
+              {{ (authService.currentUser$ | async)?.lastName }}
             </div>
-            <div class="hidden sm:flex flex-col text-right">
-              <div class="text-sm font-medium text-gray-900">
-                {{
-                  (authService.currentUser$ | async)?.firstName
-                }}
-                {{
-                  (authService.currentUser$ | async)?.lastName
-                }}
-              </div>
-              <div class="text-xs text-gray-500">
-                {{ (authService.currentUser$ | async)?.username }}
-              </div>
-            </div>
-            <button
-                (click)="logout()"
-                class="btn btn-outline text-sm px-6 py-1 text-red-500 rounded-full border border-red-300 hover:border-red-600 hover:bg-red-500 hover:text-white transition"
-            >
-              Logout
-            </button>
+           
           </div>
-        </header>
+          <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
+            <span class="text-white font-medium text-base">
+              {{ (authService.currentUser$ | async)?.firstName?.charAt(0) }}
+            </span>
+          </div>
+          <button
+              (click)="logout()"
+              class="px-6 py-1 text-sm rounded-full  bg-red-500 hover:bg-red-600 text-white transition"
+          >
+            Sign out
+          </button>
+        </div>
+      </header>
 
-        <!-- Router content -->
-        <main class="flex-1 overflow-y-auto p-6">
+      <!-- Layout with Sidebar -->
+      <div class="flex flex-1 overflow-hidden">
+        <!-- Sidebar -->
+       
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto">
           <router-outlet></router-outlet>
         </main>
       </div>
