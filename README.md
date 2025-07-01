@@ -2,7 +2,7 @@
 
 > 🎓 Internship Project 2024/2025  
 > 👨‍🎓 Class: 11V  
-> 🧑‍💻 Developer: [Your Name]
+> 🧑‍💻 Developer: Denis Yusein
 
 ---
 
