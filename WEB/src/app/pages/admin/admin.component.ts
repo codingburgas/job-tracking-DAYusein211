@@ -14,7 +14,7 @@ import { Application, ApplicationStatus } from '../../models/application.model';
     <main class="flex min-h-screen bg-gray-100">
       <!-- Sidebar -->
       <aside class="w-64 bg-white rounded-r-2xl shadow p-6 flex flex-col">
-        <h1 class="text-2xl font-extrabold text-blue-600 mb-2">Owner</h1>
+        <h1 class="text-2xl font-extrabold text-black mb-2">Owner</h1>
         <nav class="space-y-2">
           <button (click)="activeTab='jobs'" [class]="activeTab==='jobs'? 'w-full text-left px-4 py-2 bg-blue-50 text-blue-600 rounded-lg' : 'w-full text-left px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg'">
             Jobs ({{ jobs.length }})

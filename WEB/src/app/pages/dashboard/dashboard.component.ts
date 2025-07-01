@@ -34,20 +34,20 @@ import { JobPosting } from '../../models/job.model';
       <div class="max-w-7xl  py-10">
         <div class="flex gap-8 px-6 ">
           <!-- Sidebar Filters -->
-          <aside class="w-72 flex-shrink-0 bg-[#0F172A] rounded-2xl shadow p-6 sticky top-20 self-start">
-            <h3 class="text-lg font-semibold text-white mb-4">Filter</h3>
+          <aside class="w-72 flex-shrink-0 bg-white rounded-2xl shadow p-6 sticky top-20 self-start">
+            <h3 class="text-lg font-bold text-black mb-4">Filter</h3>
             <fieldset>
-              <legend class="text-white font-medium mb-2">Job Type</legend>
+              <legend class="text-gray-900 font-semibold mb-2">Job Type</legend>
               <div class="flex flex-col space-y-3">
                 <label *ngFor="let type of ['','Full-time','Part-time','Internship','Contract']"
-                       class="flex items-center space-x-2 w-full">
+                       class="flex items-center space-x-2 w-full cursor-pointer">
                   <input type="radio"
                          name="jobType"
                          [value]="type"
                          (change)="onJobTypeChange(type)"
                          [checked]="selectedJobType === type"
-                         class="form-radio text-blue-600" />
-                  <span class="text-white  text-opacity-70">{{ type || 'All Types' }}</span>
+                         class="form-radio text-blue-600 peer" />
+                  <span class="text-gray-700 font-medium text-opacity-70 peer-focus:text-blue-700">{{ type || 'All Types' }}</span>
                 </label>
               </div>
             </fieldset>
